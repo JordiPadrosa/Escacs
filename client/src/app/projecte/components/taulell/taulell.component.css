@@ -1,0 +1,43 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    justify-content: space-around;
+    display: flex;
+  }
+
+#tablero {
+    background: url(http://img.freepik.com/free-photo/wooden-texture_1160-686.jpg?size=338&amp;ext=jpg);
+    box-shadow:0 10px 10px -6px rgba(0,0,0,.6);
+    border-radius: 3px;
+    border-collapse: collapse;
+    height: 400px;
+    width: auto;
+    background-repeat: no-repeat;
+    background-size: 150%;
+    
+    top: 30px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+  
+  #tablero td {
+    width: 40px;
+    height: 40px;
+  }
+  
+  #tablero tr:nth-child(odd) td:nth-child(even),
+  #tablero tr:nth-child(even) td:nth-child(odd) {
+    background: rgba(0,0,0,.4);
+  }
+
+  .cementiri {
+    display: flex;
+    flex-wrap: wrap;
+    width: 420px;
+    height: 100px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px black solid;
+  }

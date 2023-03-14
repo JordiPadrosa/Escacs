@@ -1,0 +1,9 @@
+<form [formGroup]="this.form">
+    <label>Nom Equip: </label>
+    <input type="text" formControlName="nomEquip">
+    <label>Jugador 1: </label>
+    <input type="text" formControlName="jugador1">
+    <label>Jugador 2: </label>
+    <input type="text" formControlName="jugador2">
+    <button [disabled]="!this.form.valid" (click)="afegirEquip()">Entrar</button>
+</form>

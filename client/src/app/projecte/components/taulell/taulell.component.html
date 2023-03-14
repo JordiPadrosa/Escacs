@@ -1,0 +1,72 @@
+<body>
+  <div class="taula1">
+    <table class="cementiri">
+      <tr *ngFor="let mort of whiteMorts1">
+        <td>
+          <img src="{{mort}}" width="36px" height="auto">
+        </td>
+      </tr>
+    </table>
+    <table id="tablero">
+      <tr>
+        <td></td>
+        <td *ngFor="let lletra of lletres">{{lletra}}</td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let files of taulell; let i = index">
+        <td>{{8-i}}</td>
+        <td *ngFor="let columna of files" (dragover)="allowDrop($event)" (drop)="drop($event, taulell)" id="{{columna.fila+''+columna.columna}}" name="1">
+          <img src="{{columna.peca.img}}" width="36px" height="auto" id="{{columna.fila+''+columna.columna}}" name="1" (dragstart)="dragStart($event)">
+        </td>
+        <td>{{8-i}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td *ngFor="let lletra of lletres">{{lletra}}</td>
+        <td></td>
+      </tr>
+    </table>
+    <table class="cementiri">
+      <tr *ngFor="let mort of blackMorts1">
+        <td>
+          <img src="{{mort}}" width="36px" height="auto">
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="taula2">
+    <table class="cementiri">
+      <tr *ngFor="let mort of blackMorts2">
+        <td>
+          <img src="{{mort}}" width="36px" height="auto">
+        </td>
+      </tr>
+    </table>
+    <table id="tablero">
+      <tr>
+        <td></td>
+        <td *ngFor="let lletra of lletres2">{{lletra}}</td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let files of taulell2; let i = index">
+        <td>{{i+1}}</td>
+        <td *ngFor="let columna of files" (dragover)="allowDrop($event)" (drop)="drop($event, taulell2)" id="{{columna.fila+''+columna.columna}}" name="2">
+          <img src="{{columna.peca.img}}" width="36px" height="auto" draggable="true" id="{{columna.fila+''+columna.columna}}" name="2" (dragstart)="dragStart($event)">
+        </td>
+        <td>{{i+1}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td *ngFor="let lletra of lletres2">{{lletra}}</td>
+        <td></td>
+      </tr>
+    </table>
+    <table class="cementiri">
+      <tr *ngFor="let mort of whiteMorts2">
+        <td>
+          <img src="{{mort}}" width="36px" height="auto">
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
