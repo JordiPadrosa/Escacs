@@ -1,2 +1,14 @@
-<h1>Navegador de: {{jugador}}</h1>
-<button (click)="seleccionarJugador()">Jugar</button>
+<h1>Navegador de: {{jugador.nom}} - {{jugador.color}}</h1>
+<button *ngIf="!(partidaComencada | async)" [disabled]="disable" (click)="seleccionarJugador()">Jugar</button>
+<div *ngIf="(partidaComencada | async) && equip1 && equip2">
+    <h2>{{equip1.nom}} vs {{equip2.nom}}</h2>
+</div>
+<div *ngIf="(partidaComencada | async) && equip1">
+    <h2>{{equip1.jugadors[1].nom}} - {{equip1.jugadors[1].color}}</h2>
+    <h2>{{equip1.jugadors[0].nom}} - {{equip1.jugadors[0].color}}</h2>
+</div>
+<app-taulell [jugador]="this.jugador" *ngIf="(partidaComencada | async)"></app-taulell>
+<div *ngIf="(partidaComencada | async) && equip2">
+    <h2>{{equip2.jugadors[0].nom}} - {{equip2.jugadors[0].color}}</h2>
+    <h2>{{equip2.jugadors[1].nom}} - {{equip2.jugadors[1].color}}</h2>
+</div>

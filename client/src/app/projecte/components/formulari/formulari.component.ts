@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Equip } from '../../models/equip';
-import { io } from 'socket.io-client'
 import { JugadorService } from '../../services/jugador.service';
+import { Partida } from '../../models/partida';
+import { Jugador } from '../../models/jugador';
 @Component({
   selector: 'app-formulari',
   templateUrl: './formulari.component.html',
@@ -14,7 +15,6 @@ export class FormulariComponent {
   equips: Array<Equip> = [];
   socket: any;
   constructor(private fb: FormBuilder, private jugadorService: JugadorService) {
-    this.socket = io('http://localhost:4444');
   }
   
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class FormulariComponent {
 }
 
   afegirEquip(): void {
-    let data = new Equip(this.form.get("nomEquip")?.value, [this.form.get("jugador1")?.value, this.form.get("jugador2")?.value]);
+    let data = new Equip(this.form.get("nomEquip")?.value, [new Jugador(this.form.get("jugador1")?.value), new Jugador(this.form.get("jugador2")?.value)]);
     this.jugadorService.afegirEquip(data);
   }
-} 
+}

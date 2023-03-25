@@ -11,6 +11,7 @@ import { FormulariComponent } from './projecte/components/formulari/formulari.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { JugarComponent } from './projecte/components/jugar/jugar.component';
+import { CommonModule } from '@angular/common';
 
 const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
 
@@ -29,6 +30,7 @@ const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
     DragDropModule,
     SocketIoModule.forRoot(config),
     AppRoutingModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

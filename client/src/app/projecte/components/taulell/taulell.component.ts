@@ -1,19 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Casella } from '../../models/casella';
+import { Jugador } from '../../models/jugador';
 import { Peca } from '../../models/peca';
+import { JugadorService } from '../../services/jugador.service';
 
 @Component({
   selector: 'app-taulell',
   templateUrl: './taulell.component.html',
   styleUrls: ['./taulell.component.css']
 })
-export class TaulellComponent {
+export class TaulellComponent implements OnInit {
+  @Input() jugador!: Jugador;
   taulell: Casella[][] = [];
   taulell2: Casella[][] = [];
   torn = [ 
-    {id: 1, torn: 'White'},
-    {id: 2, torn: 'White'}
-   ];
+    {torn: 'White'},
+    {torn: 'White'}
+  ];
+
+
   whiteMorts1: Array<string> = [];
   whiteMorts2: Array<string> = [];
   blackMorts1: Array<string> = [];
@@ -39,8 +44,10 @@ export class TaulellComponent {
     '/assets/imatges/WhiteRock.png'
   ];
   columnes: Array<Peca> = [];
-  constructor() {
-    for (let fila = 0; fila < 8; fila++) {
+  acutalitzarTaulell: any = [];
+  
+  constructor(private jugadorService: JugadorService) {
+      for (let fila = 0; fila < 8; fila++) {
       this.taulell.push([]);
       for (let columna = 0; columna < 8; columna++) {
         if(fila == 0) {
@@ -58,6 +65,55 @@ export class TaulellComponent {
     }
     this.taulell2 = this.reverseBoard(this.taulell);
   }
+
+  ngOnInit(): void {
+    this.jugadorService.actualitzarTaulell.subscribe(
+      taulell => {
+        this.acutalitzarTaulell.push(taulell[0], taulell[1], taulell[2], taulell[3], taulell[4]);
+
+        if(this.acutalitzarTaulell.length == 5){
+          let IDorigen = this.acutalitzarTaulell[0];
+          let IDdesti = this.acutalitzarTaulell[1];
+          let origen = this.acutalitzarTaulell[2];
+          let desti = this.acutalitzarTaulell[3];
+          let IDtaulell = this.acutalitzarTaulell[4];
+          if(IDtaulell == 2){
+            this.canviarTorn(IDtaulell, origen);
+            this.afegirCementiri(desti);
+            this.taulell2[IDdesti.split("", 1)[0]][IDdesti.split("", 2)[1]].peca.img = origen.peca.img;
+            this.taulell2[IDorigen.split("", 1)[0]][IDorigen.split("", 2)[1]].peca.img = '';
+          }else {
+            this.canviarTorn(IDtaulell, origen);
+            this.afegirCementiri(desti);
+            this.taulell[IDdesti.split("", 1)[0]][IDdesti.split("", 2)[1]].peca.img = origen.peca.img;
+            this.taulell[IDorigen.split("", 1)[0]][IDorigen.split("", 2)[1]].peca.img = '';
+          }
+        }
+        this.acutalitzarTaulell = [];
+      }
+    );
+  }
+
+  canviarTorn(IDtaulell: number, origen: Casella){
+    if(this.torn[IDtaulell-1].torn == 'Black' && origen.peca.img.includes('Black')){
+      this.torn[IDtaulell-1].torn = 'White';
+    }else if(this.torn[IDtaulell-1].torn == 'White' && origen.peca.img.includes('White')){
+      this.torn[IDtaulell-1].torn = 'Black';
+    }
+  }
+
+  afegirCementiri(desti: Casella){
+    if(desti.peca.taulell == 1 && desti.peca.img.includes('White')){
+      this.whiteMorts1.push(desti.peca.img);
+    }else if(desti.peca.taulell == 1 && desti.peca.img.includes('Black')){
+      this.blackMorts1.push(desti.peca.img);
+    }else if(desti.peca.taulell == 2 && desti.peca.img.includes('White')){
+      this.whiteMorts2.push(desti.peca.img);
+    }else if(desti.peca.taulell == 2 && desti.peca.img.includes('Black')){
+      this.blackMorts2.push(desti.peca.img);
+    }
+  }
+
   reverseBoard(board: Casella[][]): Casella[][] {
     let reversedBoard: Casella[][] = [];
     for (let fila = 0; fila < 8; fila++) {
@@ -78,31 +134,14 @@ export class TaulellComponent {
     let IDorigen = event.dataTransfer.getData("id");
     let desti = taulell[IDdesti.split("", 1)[0]][IDdesti.split("", 2)[1]];
     let origen = taulell[IDorigen.split("", 1)[0]][IDorigen.split("", 2)[1]];
-    if(IDtaulell == desti.peca.taulell) {
-      if((this.torn[IDtaulell-1].torn == 'White' && origen.peca.img.includes('White'))
-      || (this.torn[IDtaulell-1].torn == 'Black' && origen.peca.img.includes('Black'))){
+    if(IDtaulell == desti.peca.taulell && this.jugador.taulell == IDtaulell) {
+      if((this.torn[IDtaulell-1].torn == 'White' && origen.peca.img.includes('White') && this.jugador.color == 'White')
+      || (this.torn[IDtaulell-1].torn == 'Black' && origen.peca.img.includes('Black') && this.jugador.color == 'Black')){
         if((desti.peca.img.includes('Black') && origen.peca.img.includes('White'))
           || (desti.peca.img.includes('White') && origen.peca.img.includes('Black'))
           || (desti.peca.img == '')){
-            if(this.torn[IDtaulell-1].torn == 'Black' && origen.peca.img.includes('Black')){
-              this.torn[IDtaulell-1].torn = 'White';
-              console.log(this.torn[IDtaulell-1].torn);
-            }else if(this.torn[IDtaulell-1].torn == 'White' && origen.peca.img.includes('White')){
-              this.torn[IDtaulell-1].torn = 'Black';
-              console.log(this.torn[IDtaulell-1].torn);
-            }
-            if(desti.peca.taulell == 1 && desti.peca.img.includes('White')){
-              this.whiteMorts1.push(desti.peca.img);
-            }else if(desti.peca.taulell == 1 && desti.peca.img.includes('Black')){
-              this.blackMorts1.push(desti.peca.img);
-            }else if(desti.peca.taulell == 2 && desti.peca.img.includes('White')){
-              this.whiteMorts2.push(desti.peca.img);
-            }else if(desti.peca.taulell == 2 && desti.peca.img.includes('Black')){
-              this.blackMorts2.push(desti.peca.img);
-            }
-            desti.peca.img = origen.peca.img;
-            origen.peca.img = '';
-          }  
+            this.jugadorService.movimentPeca(IDorigen, IDdesti, origen, desti, IDtaulell);
+          }
       }
     }
     
